@@ -1,126 +1,180 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Users</title>
+    <title>Пользователи</title>
     <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* Стили для элементов пользователя */
+        .user {
+            border: 1px solid #ccc;
+            padding: 20px;
+            margin-bottom: 20px;
+            background-color: #f9f9f9;
+            display: flex;
+            align-items: center;
+        }
+
+        .user-info {
+            margin-left: 20px;
+        }
+
+        .user-info h2 {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .user-info p {
+            font-size: 16px;
+            color: #666;
+        }
+
+        .avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            overflow: hidden;
+        }
+
+        .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Стили для поиска пользователя */
+        #search-container {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #444444;
+            display: flex;
+            align-items: center;
+        }
+
+        #search-container input[type="text"] {
+            flex: 1;
+            padding: 10px;
+            font-size: 16px;
+        }
+
+        #search-container button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #00ffff;
+            color: #1a1a1a;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        #search-container button:hover {
+            background-color: #00cccc;
+        }
+    </style>
 </head>
 <body>
     <header>
         <nav>
-            <ul>
-                <li><a href="users.html">Users</a></li>
-                <li><a href="news.html">News</a></li>
-                <li><a href="announcements.html">Announcements</a></li>
-            </ul>
+            <a href="users.html">Пользователи</a>
+            <a href="news.html">Новости</a>
+            <a href="announcements.html">Объявления</a>
         </nav>
     </header>
-    <h1>Users</h1>
-    <input type="text" id="searchUserId" placeholder="Search user by ID">
-    <button id="searchUserButton">Search</button>
-    <table id="usersTable">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Avatar</th>
-            </tr>
-        </thead>
-        <tbody></tbody>
-    </table>
+
+    <h1>Пользователи</h1>
+
+    <!-- Контейнер для поиска пользователя по ID -->
+    <div id="search-container">
+        <input type="text" id="userIdInput" placeholder="Введите ID пользователя">
+        <button onclick="searchUser()">Поиск</button>
+        <button onclick="cancelSearch()">Отмена</button>
+    </div>
+
+    <!-- Контейнер для списка пользователей -->
+    <div id="user-list"></div>
 
     <script>
-        // Replace this URL with the actual API URL for users
-        const usersApiUrl = 'https://4418c1d7060c8d8f.mokky.dev/news';
+        let originalUsers = []; // Сохраняем изначальный список пользователей
 
-        async function fetchData(url) {
-            const resp = await fetch(url);
-            const data = await resp.json();
-
-            if (!resp.ok) {
-                throw new Error(data.message || 'Something went wrong');
-            }
-
-            return data;
-        }
-
+        // Функция для загрузки списка пользователей с API
         function loadUsers() {
-            fetchData(usersApiUrl)
-                .then((users) => {
-                    // Clear the table and display the users
-                    const tableBody = document.querySelector('#usersTable tbody');
-                    tableBody.innerHTML = '';
-
-                    users.forEach((user) => {
-                        const row = document.createElement('tr');
-
-                        const idCell = document.createElement('td');
-                        idCell.textContent = user.id;
-                        row.appendChild(idCell);
-
-                        const nameCell = document.createElement('td');
-                        nameCell.textContent = user.name;
-                        row.appendChild(nameCell);
-
-                        const avatarCell = document.createElement('td');
-                        const avatarImg = document.createElement('img');
-                        avatarImg.src = user.avatar;
-                        avatarImg.alt = `Avatar of ${user.name}`;
-                        avatarCell.appendChild(avatarImg);
-                        row.appendChild(avatarCell);
-
-                        tableBody.appendChild(row);
-                    });
+            fetch('https://4418c1d7060c8d8f.mokky.dev/users')
+                .then(response => response.json())
+                .then(users => {
+                    originalUsers = users; // Сохраняем изначальный список пользователей
+                    displayUsers(users); // Отображаем список пользователей
                 })
-                .catch((error) => {
-                    console.error('Error fetching users:', error);
-                });
+                .catch(error => console.error('Ошибка при загрузке пользователей:', error));
         }
 
-        async function searchUserById() {
-            const input = document.querySelector('#searchUserId');
-            const userId = input.value.trim();
+        // Функция для отображения списка пользователей
+        function displayUsers(users) {
+            const userListElement = document.getElementById('user-list');
+            userListElement.innerHTML = ''; // Очищаем содержимое перед загрузкой новых данных
 
-            if (!userId) {
-                loadUsers();
-                return;
-            }
+            users.forEach(user => {
+                const userContainer = createUserContainer(user);
+                userListElement.appendChild(userContainer);
+            });
+        }
 
-            try {
-                const url = `${usersApiUrl}/${userId}`;
-                const user = await fetchData(url);
+        // Функция для создания контейнера с информацией о пользователе
+        function createUserContainer(user) {
+            const userContainer = document.createElement('div');
+            userContainer.classList.add('user');
 
-                // Clear the table and display the user
-                const tableBody = document.querySelector('#usersTable tbody');
-                tableBody.innerHTML = '';
+            const avatarContainer = document.createElement('div');
+            avatarContainer.classList.add('avatar');
 
-                const row = document.createElement('tr');
+            const avatarImg = document.createElement('img');
+            avatarImg.src = user.avatar;
+            avatarImg.alt = 'Аватар пользователя';
 
-                const idCell = document.createElement('td');
-                idCell.textContent = user.id;
-                row.appendChild(idCell);
+            avatarContainer.appendChild(avatarImg);
 
-                const nameCell = document.createElement('td');
-                nameCell.textContent = user.name;
-                row.appendChild(nameCell);
+            const userInfo = document.createElement('div');
+            userInfo.classList.add('user-info');
 
-                const avatarCell = document.createElement('td');
-                const avatarImg = document.createElement('img');
-                avatarImg.src = user.avatar;
-                avatarImg.alt = `Avatar of ${user.name}`;
-                avatarCell.appendChild(avatarImg);
-                row.appendChild(avatarCell);
+            const userName = document.createElement('h2');
+            userName.textContent = user.name;
 
-                tableBody.appendChild(row);
-            } catch (error) {
-                console.error('Error fetching user:', error);
+            const userId = document.createElement('p');
+            userId.textContent = `ID: ${user.id}`;
+
+            userInfo.appendChild(userName);
+            userInfo.appendChild(userId);
+
+            userContainer.appendChild(avatarContainer);
+            userContainer.appendChild(userInfo);
+
+            return userContainer;
+        }
+
+        // Функция для поиска пользователя по ID
+        function searchUser() {
+            const userIdInput = document.getElementById('userIdInput');
+            const userId = parseInt(userIdInput.value);
+
+            const foundUser = originalUsers.find(user => user.id === userId); // Ищем пользователя по ID в изначальном списке
+
+            if (foundUser) {
+                displayUsers([foundUser]); // Отображаем найденного пользователя
+            } else {
+                alert('Пользователь не найден. Пожалуйста, введите корректный ID.');
             }
         }
 
-        document.querySelector('#searchUserButton').addEventListener('click', searchUserById);
+        // Функция для отмены поиска и отображения всех пользователей
+        function cancelSearch() {
+            displayUsers(originalUsers); // Отображаем всех пользователей из изначального списка
+        }
 
-        loadUsers();
+        // Загружаем список пользователей при загрузке страницы
+        window.onload = loadUsers;
     </script>
 </body>
 </html>

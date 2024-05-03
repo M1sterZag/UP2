@@ -1,118 +1,192 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>News</title>
+    <title>Новости</title>
     <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* Стили для элементов новости */
+        .post {
+            border: 1px solid #ccc;
+            padding: 20px;
+            margin-bottom: 20px;
+            background-color: #f9f9f9;
+        }
+
+        .post-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .post-text {
+            font-size: 18px;
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .post-date {
+            font-size: 16px;
+            color: #888;
+        }
+
+        /* Стили для формы добавления новости */
+        #add-news-form {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #444444;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #add-news-form input,
+        #add-news-form textarea {
+            margin-bottom: 10px;
+            padding: 10px;
+            font-size: 16px;
+        }
+
+        #add-news-form button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #00ffff;
+            color: #1a1a1a;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        #add-news-form button:hover {
+            background-color: #00cccc;
+        }
+    </style>
 </head>
-<header>
-    <nav>
-        <ul>
-            <li><a href="users.html">Users</a></li>
-            <li><a href="news.html">News</a></li>
-            <li><a href="announcements.html">Announcements</a></li>
-        </ul>
-    </nav>
-</header>
 <body>
-    <h1>News</h1>
-    <button id="addNewsButton">Add News</button>
-    <table id="newsTable">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Title</th>
-                <th>Content</th>
-                <th>Date</th>
-                <!-- <th>User ID</th> -->
-            </tr>
-        </thead>
-        <tbody></tbody>
-    </table>
-    <script src="script.js"></script>
+    <header>
+        <nav>
+            <a href="users.html">Пользователи</a>
+            <a href="news.html">Новости</a>
+            <a href="announcements.html">Объявления</a>
+        </nav>
+    </header>
 
-    <!-- <script>
-        // Replace this URL with the actual API URL for news
-        const newsApiUrl = 'https://4418c1d7060c8d8f.mokky.dev/news';
+    <h1>Новости</h1>
 
-        async function fetchData(url) {
-            const resp = await fetch(url);
-            const data = await resp.json();
+    <!-- Контейнер для списка новостей -->
+    <div id="news-list"></div>
 
-            if (!resp.ok) {
-                throw new Error(data.message || 'Something went wrong');
-            }
+    <!-- Форма для добавления новости -->
+    <div id="add-news-form">
+        <input type="text" id="newsTitleInput" placeholder="Заголовок новости">
+        <textarea id="newsContentInput" placeholder="Текст новости"></textarea>
+        <input type="date" id="newsDateInput">
+        <button onclick="addNews()">Добавить новость</button>
+    </div>
 
-            return data;
-        }
-
-        async function deleteNews(id) {
-            const url = `${newsApiUrl}/${id}`;
-
-            try {
-                const resp = await fetch(url, { method: 'DELETE' });
-
-                if (resp.ok) {
-                    loadNews();
-                } else {
-                    console.error('Error deleting news:', resp.statusText);
-                }
-            } catch (error) {
-                console.error('Error deleting news:', error);
-            }
-        }
-
+    <script>
+        // Загрузка списка новостей с API
         function loadNews() {
-            fetchData(newsApiUrl)
-                .then((news) => {
-                    // Clear the table and display the news
-                    const tableBody = document.querySelector('#newsTable tbody');
-                    tableBody.innerHTML = '';
+            fetch('https://4418c1d7060c8d8f.mokky.dev/news')
+                .then(response => response.json())
+                .then(news => {
+                    const newsListElement = document.getElementById('news-list');
+                    newsListElement.innerHTML = ''; // Очищаем содержимое перед загрузкой новых данных
 
-                    news.forEach((item) => {
-                        const row = document.createElement('tr');
-
-                        const idCell = document.createElement('td');
-                        idCell.textContent = item.id;
-                        row.appendChild(idCell);
-
-                        const titleCell = document.createElement('td');
-                        titleCell.textContent = item.title;
-                        row.appendChild(titleCell);
-
-                        const contentCell = document.createElement('td');
-                        contentCell.textContent = item.content;
-                        row.appendChild(contentCell);
-
-                        const dateCell = document.createElement('td');
-                        dateCell.textContent = item.date;
-                        row.appendChild(dateCell);
-
-                        // const user_idCell = document.createElement('td');
-                        // user_idCell.textContent = item.user_id;
-                        // row.appendChild(user_idCell);
-
-                        // const actionsCell = document.createElement('td');
-                        // const deleteButton = document.createElement('button');
-                        // deleteButton.textContent = 'Delete';
-                        // deleteButton.addEventListener('click', () => deleteNews(item.id));
-                        // actionsCell.appendChild(deleteButton);
-                        // row.appendChild(actionsCell);
-
-                        tableBody.appendChild(row);
+                    news.forEach(item => {
+                        const postContainer = createPostContainer(item);
+                        newsListElement.appendChild(postContainer);
                     });
                 })
-                .catch((error) => {
-                    console.error('Error fetching news:', error);
-                });
+                .catch(error => console.error('Ошибка при загрузке новостей:', error));
         }
 
-        document.querySelector('#addNewsButton').addEventListener('click', () => {
-            // Add your code for adding news here
-        });
+        // Функция для создания контейнера с информацией о новости
+        function createPostContainer(newsItem) {
+            const postContainer = document.createElement('div');
+            postContainer.classList.add('post');
 
-        loadNews();
-    </script> -->
+            const postTitle = document.createElement('div');
+            postTitle.classList.add('post-title');
+            postTitle.textContent = newsItem.title;
+
+            const postText = document.createElement('div');
+            postText.classList.add('post-text');
+            postText.textContent = newsItem.content;
+
+            const postDate = document.createElement('div');
+            postDate.classList.add('post-date');
+            postDate.textContent = `Дата: ${newsItem.date}`;
+
+            const deleteButton = document.createElement('button');
+            deleteButton.textContent = 'Удалить';
+            deleteButton.onclick = () => deleteNews(newsItem.id);
+
+            postContainer.appendChild(postTitle);
+            postContainer.appendChild(postText);
+            postContainer.appendChild(postDate);
+            postContainer.appendChild(deleteButton);
+
+            return postContainer;
+        }
+
+        // Функция для добавления новости
+        function addNews() {
+            const newsTitleInput = document.getElementById('newsTitleInput');
+            const newsContentInput = document.getElementById('newsContentInput');
+            const newsDateInput = document.getElementById('newsDateInput');
+
+            const newNews = {
+                title: newsTitleInput.value,
+                content: newsContentInput.value,
+                date: newsDateInput.value
+            };
+
+            fetch('https://4418c1d7060c8d8f.mokky.dev/news', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(newNews)
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error('Ошибка при добавлении новости');
+                }
+            })
+            .then(() => {
+                // После успешного добавления новости, перезагружаем список новостей
+                loadNews();
+                // Очищаем поля ввода
+                newsTitleInput.value = '';
+                newsContentInput.value = '';
+                newsDateInput.value = '';
+            })
+            .catch(error => console.error('Ошибка при добавлении новости:', error));
+        }
+
+        // Функция для удаления новости по ID
+        function deleteNews(newsId) {
+            fetch(`https://4418c1d7060c8d8f.mokky.dev/news/${newsId}`, {
+                method: 'DELETE'
+            })
+            .then(response => {
+                if (response.ok) {
+                    // После успешного удаления новости, перезагружаем список новостей
+                    loadNews();
+                } else {
+                    throw new Error('Ошибка при удалении новости');
+                }
+            })
+            .catch(error => console.error('Ошибка при удалении новости:', error));
+        }
+
+        // Загружаем список новостей при загрузке страницы
+        window.onload = loadNews;
+    </script>
 </body>
-</html
+</html>

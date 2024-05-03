@@ -1,108 +1,280 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Announcements</title>
+    <title>Объявления</title>
     <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* Общие стили */
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f0f0f0;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #444444;
+            color: #fff;
+            padding: 10px 20px;
+            text-align: center;
+        }
+
+        nav {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        /* Стили для элементов объявления */
+        .announcement {
+            border: 1px solid #ccc;
+            padding: 20px;
+            margin-bottom: 20px;
+            background-color: #fff;
+            position: relative;
+        }
+
+        .announcement-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #333; /* Цвет текста заголовка */
+        }
+
+        .announcement-content {
+            font-size: 18px;
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin-right: 10px;
+        }
+
+        .user-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .user-name {
+            font-size: 16px;
+        }
+
+        /* Стили для формы добавления объявления */
+        #add-announcement-form {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #ddd;
+        }
+
+        #add-announcement-form input,
+        #add-announcement-form textarea {
+            margin-bottom: 10px;
+            padding: 10px;
+            font-size: 16px;
+            width: 100%;
+        }
+
+        #add-announcement-form button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #00ccff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        #add-announcement-form button:hover {
+            background-color: #0099cc;
+        }
+
+        /* Стили для кнопки удаления объявления */
+        .delete-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 5px 10px;
+            font-size: 14px;
+            background-color: #ff3300;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .delete-button:hover {
+            background-color: #cc0000;
+        }
+    </style>
 </head>
-<header>
-    <nav>
-        <ul>
-            <li><a href="users.html">Users</a></li>
-            <li><a href="news.html">News</a></li>
-            <li><a href="announcements.html">Announcements</a></li>
-        </ul>
-    </nav>
-</header>
 <body>
-    <h1>Announcements</h1>
-    <button id="addAnnouncementButton">Add Announcement</button>
-    <table id="announcementsTable">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>User</th>
-                <th>Content</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody></tbody>
-    </table>
+    <header>
+        <nav>
+            <a href="users.html">Пользователи</a>
+            <a href="news.html">Новости</a>
+            <a href="announcements.html">Объявления</a>
+        </nav>
+    </header>
+
+    <h1>Объявления</h1>
+
+    <!-- Контейнер для списка объявлений -->
+    <div id="announcements-list"></div>
+
+    <!-- Форма для добавления нового объявления -->
+    <div id="add-announcement-form">
+        <input type="number" id="userIdInput" placeholder="ID пользователя" min="1">
+        <input type="text" id="announcementTitleInput" placeholder="Заголовок объявления">
+        <textarea id="announcementContentInput" placeholder="Содержание объявления"></textarea>
+        <button onclick="addAnnouncement()">Добавить объявление</button>
+    </div>
 
     <script>
-        // Replace this URL with the actual API URL for announcements
-        const announcementsApiUrl = 'https://4418c1d7060c8d8f.mokky.dev/announcements';
-
-        async function fetchData(url) {
-            const resp = await fetch(url);
-            const data = await resp.json();
-
-            if (!resp.ok) {
-                throw new Error(data.message || 'Something went wrong');
-            }
-
-            return data;
-        }
-
-        async function deleteAnnouncement(id) {
-            const url = `${announcementsApiUrl}/${id}`;
-
-            try {
-                const resp = await fetch(url, { method: 'DELETE' });
-
-                if (resp.ok) {
-                    loadAnnouncements();
-                } else {
-                    console.error('Error deleting announcement:', resp.statusText);
-                }
-            } catch (error) {
-                console.error('Error deleting announcement:', error);
-            }
-        }
-
+        // Загрузка списка объявлений с информацией о связанных пользователях
         function loadAnnouncements() {
-            fetchData(announcementsApiUrl)
-                .then((announcements) => {
-                    // Clear the table and display the announcements
-                    const tableBody = document.querySelector('#announcementsTable tbody');
-                    tableBody.innerHTML = '';
+            fetch('https://4418c1d7060c8d8f.mokky.dev/announcements?_relations=users')
+                .then(response => response.json())
+                .then(announcements => {
+                    const announcementsListElement = document.getElementById('announcements-list');
+                    announcementsListElement.innerHTML = ''; // Очищаем содержимое перед загрузкой новых данных
 
-                    announcements.forEach((item) => {
-                        const row = document.createElement('tr');
-
-                        const idCell = document.createElement('td');
-                        idCell.textContent = item.id;
-                        row.appendChild(idCell);
-
-                        const userCell = document.createElement('td');
-                        userCell.textContent = item.user_name;
-                        row.appendChild(userCell);
-
-                        const contentCell = document.createElement('td');
-                        contentCell.textContent = item.content;
-                        row.appendChild(contentCell);
-
-                        const actionsCell = document.createElement('td');
-                        const deleteButton = document.createElement('button');
-                        deleteButton.textContent = 'Delete';
-                        deleteButton.addEventListener('click', () => deleteAnnouncement(item.id));
-                        actionsCell.appendChild(deleteButton);
-                        row.appendChild(actionsCell);
-
-                        tableBody.appendChild(row);
+                    announcements.forEach(announcement => {
+                        const announcementContainer = createAnnouncementContainer(announcement);
+                        announcementsListElement.appendChild(announcementContainer);
                     });
                 })
-                .catch((error) => {
-                    console.error('Error fetching announcements:', error);
+                .catch(error => console.error('Ошибка при загрузке объявлений:', error));
+        }
+
+        // Функция для создания контейнера с информацией об объявлении
+        function createAnnouncementContainer(announcement) {
+            const announcementContainer = document.createElement('div');
+            announcementContainer.classList.add('announcement');
+
+            const announcementTitle = document.createElement('div');
+            announcementTitle.classList.add('announcement-title');
+            announcementTitle.textContent = announcement.title;
+
+            const announcementContent = document.createElement('div');
+            announcementContent.classList.add('announcement-content');
+            announcementContent.textContent = announcement.content;
+
+            const userInfoContainer = document.createElement('div');
+            userInfoContainer.classList.add('user-info');
+
+            const userAvatar = document.createElement('div');
+            userAvatar.classList.add('user-avatar');
+            const avatarImg = document.createElement('img');
+            avatarImg.src = announcement.user.avatar;
+            avatarImg.alt = 'Аватар пользователя';
+            userAvatar.appendChild(avatarImg);
+
+            const userName = document.createElement('div');
+            userName.classList.add('user-name');
+            userName.textContent = announcement.user.name;
+
+            userInfoContainer.appendChild(userAvatar);
+            userInfoContainer.appendChild(userName);
+
+            // Кнопка "Удалить" для объявления
+            const deleteButton = document.createElement('button');
+            deleteButton.classList.add('delete-button');
+            deleteButton.textContent = 'Удалить';
+            deleteButton.onclick = () => deleteAnnouncement(announcement.id);
+
+            announcementContainer.appendChild(announcementTitle);
+            announcementContainer.appendChild(announcementContent);
+            announcementContainer.appendChild(userInfoContainer);
+            announcementContainer.appendChild(deleteButton);
+
+            return announcementContainer;
+        }
+
+        // Функция для добавления нового объявления
+        function addAnnouncement() {
+            const user_id = parseInt(document.getElementById('userIdInput').value);
+            const title = document.getElementById('announcementTitleInput').value;
+            const content = document.getElementById('announcementContentInput').value;
+
+            // Проверка существования пользователя по user_id
+            fetch(`https://4418c1d7060c8d8f.mokky.dev/users/${user_id}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Пользователь с указанным ID не найден');
+                    }
+                    return response.json();
+                })
+                .then(() => {
+                    // Отправка запроса на добавление нового объявления
+                    return fetch('https://4418c1d7060c8d8f.mokky.dev/announcements', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ user_id, title, content })
+                    });
+                })
+                .then(response => {
+                    if (response.ok) {
+                        loadAnnouncements(); // Перезагружаем список объявлений после добавления
+                        // Очистка формы после успешного добавления
+                        document.getElementById('userIdInput').value = '';
+                        document.getElementById('announcementTitleInput').value = '';
+                        document.getElementById('announcementContentInput').value = '';
+                    } else {
+                        throw new Error('Ошибка при добавлении объявления');
+                    }
+                })
+                .catch(error => {
+                    console.error('Ошибка при добавлении объявления:', error);
+                    alert(error.message);
                 });
         }
 
-        document.querySelector('#addAnnouncementButton').addEventListener('click', () => {
-            // Add your code for adding an announcement here
-        });
+        // Функция для удаления объявления
+        function deleteAnnouncement(announcementId) {
+            fetch(`https://4418c1d7060c8d8f.mokky.dev/announcements/${announcementId}`, {
+                method: 'DELETE'
+            })
+            .then(response => {
+                if (response.ok) {
+                    loadAnnouncements(); // Перезагружаем список объявлений после удаления
+                } else {
+                    throw new Error('Ошибка при удалении объявления');
+                }
+            })
+            .catch(error => console.error('Ошибка при удалении объявления:', error));
+        }
 
-        loadAnnouncements();
+        // Загрузка списка объявлений при загрузке страницы
+        window.onload = loadAnnouncements;
     </script>
 </body>
 </html>
