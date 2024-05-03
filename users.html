@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Users</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="users.html">Users</a></li>
+                <li><a href="news.html">News</a></li>
+                <li><a href="announcements.html">Announcements</a></li>
+            </ul>
+        </nav>
+    </header>
+    <h1>Users</h1>
+    <input type="text" id="searchUserId" placeholder="Search user by ID">
+    <button id="searchUserButton">Search</button>
+    <table id="usersTable">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Avatar</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <script>
+        // Replace this URL with the actual API URL for users
+        const usersApiUrl = 'https://4418c1d7060c8d8f.mokky.dev/news';
+
+        async function fetchData(url) {
+            const resp = await fetch(url);
+            const data = await resp.json();
+
+            if (!resp.ok) {
+                throw new Error(data.message || 'Something went wrong');
+            }
+
+            return data;
+        }
+
+        function loadUsers() {
+            fetchData(usersApiUrl)
+                .then((users) => {
+                    // Clear the table and display the users
+                    const tableBody = document.querySelector('#usersTable tbody');
+                    tableBody.innerHTML = '';
+
+                    users.forEach((user) => {
+                        const row = document.createElement('tr');
+
+                        const idCell = document.createElement('td');
+                        idCell.textContent = user.id;
+                        row.appendChild(idCell);
+
+                        const nameCell = document.createElement('td');
+                        nameCell.textContent = user.name;
+                        row.appendChild(nameCell);
+
+                        const avatarCell = document.createElement('td');
+                        const avatarImg = document.createElement('img');
+                        avatarImg.src = user.avatar;
+                        avatarImg.alt = `Avatar of ${user.name}`;
+                        avatarCell.appendChild(avatarImg);
+                        row.appendChild(avatarCell);
+
+                        tableBody.appendChild(row);
+                    });
+                })
+                .catch((error) => {
+                    console.error('Error fetching users:', error);
+                });
+        }
+
+        async function searchUserById() {
+            const input = document.querySelector('#searchUserId');
+            const userId = input.value.trim();
+
+            if (!userId) {
+                loadUsers();
+                return;
+            }
+
+            try {
+                const url = `${usersApiUrl}/${userId}`;
+                const user = await fetchData(url);
+
+                // Clear the table and display the user
+                const tableBody = document.querySelector('#usersTable tbody');
+                tableBody.innerHTML = '';
+
+                const row = document.createElement('tr');
+
+                const idCell = document.createElement('td');
+                idCell.textContent = user.id;
+                row.appendChild(idCell);
+
+                const nameCell = document.createElement('td');
+                nameCell.textContent = user.name;
+                row.appendChild(nameCell);
+
+                const avatarCell = document.createElement('td');
+                const avatarImg = document.createElement('img');
+                avatarImg.src = user.avatar;
+                avatarImg.alt = `Avatar of ${user.name}`;
+                avatarCell.appendChild(avatarImg);
+                row.appendChild(avatarCell);
+
+                tableBody.appendChild(row);
+            } catch (error) {
+                console.error('Error fetching user:', error);
+            }
+        }
+
+        document.querySelector('#searchUserButton').addEventListener('click', searchUserById);
+
+        loadUsers();
+    </script>
+</body>
+</html>

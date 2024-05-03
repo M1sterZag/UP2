@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Announcements</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<header>
+    <nav>
+        <ul>
+            <li><a href="users.html">Users</a></li>
+            <li><a href="news.html">News</a></li>
+            <li><a href="announcements.html">Announcements</a></li>
+        </ul>
+    </nav>
+</header>
+<body>
+    <h1>Announcements</h1>
+    <button id="addAnnouncementButton">Add Announcement</button>
+    <table id="announcementsTable">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>User</th>
+                <th>Content</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <script>
+        // Replace this URL with the actual API URL for announcements
+        const announcementsApiUrl = 'https://4418c1d7060c8d8f.mokky.dev/announcements';
+
+        async function fetchData(url) {
+            const resp = await fetch(url);
+            const data = await resp.json();
+
+            if (!resp.ok) {
+                throw new Error(data.message || 'Something went wrong');
+            }
+
+            return data;
+        }
+
+        async function deleteAnnouncement(id) {
+            const url = `${announcementsApiUrl}/${id}`;
+
+            try {
+                const resp = await fetch(url, { method: 'DELETE' });
+
+                if (resp.ok) {
+                    loadAnnouncements();
+                } else {
+                    console.error('Error deleting announcement:', resp.statusText);
+                }
+            } catch (error) {
+                console.error('Error deleting announcement:', error);
+            }
+        }
+
+        function loadAnnouncements() {
+            fetchData(announcementsApiUrl)
+                .then((announcements) => {
+                    // Clear the table and display the announcements
+                    const tableBody = document.querySelector('#announcementsTable tbody');
+                    tableBody.innerHTML = '';
+
+                    announcements.forEach((item) => {
+                        const row = document.createElement('tr');
+
+                        const idCell = document.createElement('td');
+                        idCell.textContent = item.id;
+                        row.appendChild(idCell);
+
+                        const userCell = document.createElement('td');
+                        userCell.textContent = item.user_name;
+                        row.appendChild(userCell);
+
+                        const contentCell = document.createElement('td');
+                        contentCell.textContent = item.content;
+                        row.appendChild(contentCell);
+
+                        const actionsCell = document.createElement('td');
+                        const deleteButton = document.createElement('button');
+                        deleteButton.textContent = 'Delete';
+                        deleteButton.addEventListener('click', () => deleteAnnouncement(item.id));
+                        actionsCell.appendChild(deleteButton);
+                        row.appendChild(actionsCell);
+
+                        tableBody.appendChild(row);
+                    });
+                })
+                .catch((error) => {
+                    console.error('Error fetching announcements:', error);
+                });
+        }
+
+        document.querySelector('#addAnnouncementButton').addEventListener('click', () => {
+            // Add your code for adding an announcement here
+        });
+
+        loadAnnouncements();
+    </script>
+</body>
+</html>

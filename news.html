@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>News</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<header>
+    <nav>
+        <ul>
+            <li><a href="users.html">Users</a></li>
+            <li><a href="news.html">News</a></li>
+            <li><a href="announcements.html">Announcements</a></li>
+        </ul>
+    </nav>
+</header>
+<body>
+    <h1>News</h1>
+    <button id="addNewsButton">Add News</button>
+    <table id="newsTable">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Content</th>
+                <th>Date</th>
+                <!-- <th>User ID</th> -->
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    <script src="script.js"></script>
+
+    <!-- <script>
+        // Replace this URL with the actual API URL for news
+        const newsApiUrl = 'https://4418c1d7060c8d8f.mokky.dev/news';
+
+        async function fetchData(url) {
+            const resp = await fetch(url);
+            const data = await resp.json();
+
+            if (!resp.ok) {
+                throw new Error(data.message || 'Something went wrong');
+            }
+
+            return data;
+        }
+
+        async function deleteNews(id) {
+            const url = `${newsApiUrl}/${id}`;
+
+            try {
+                const resp = await fetch(url, { method: 'DELETE' });
+
+                if (resp.ok) {
+                    loadNews();
+                } else {
+                    console.error('Error deleting news:', resp.statusText);
+                }
+            } catch (error) {
+                console.error('Error deleting news:', error);
+            }
+        }
+
+        function loadNews() {
+            fetchData(newsApiUrl)
+                .then((news) => {
+                    // Clear the table and display the news
+                    const tableBody = document.querySelector('#newsTable tbody');
+                    tableBody.innerHTML = '';
+
+                    news.forEach((item) => {
+                        const row = document.createElement('tr');
+
+                        const idCell = document.createElement('td');
+                        idCell.textContent = item.id;
+                        row.appendChild(idCell);
+
+                        const titleCell = document.createElement('td');
+                        titleCell.textContent = item.title;
+                        row.appendChild(titleCell);
+
+                        const contentCell = document.createElement('td');
+                        contentCell.textContent = item.content;
+                        row.appendChild(contentCell);
+
+                        const dateCell = document.createElement('td');
+                        dateCell.textContent = item.date;
+                        row.appendChild(dateCell);
+
+                        // const user_idCell = document.createElement('td');
+                        // user_idCell.textContent = item.user_id;
+                        // row.appendChild(user_idCell);
+
+                        // const actionsCell = document.createElement('td');
+                        // const deleteButton = document.createElement('button');
+                        // deleteButton.textContent = 'Delete';
+                        // deleteButton.addEventListener('click', () => deleteNews(item.id));
+                        // actionsCell.appendChild(deleteButton);
+                        // row.appendChild(actionsCell);
+
+                        tableBody.appendChild(row);
+                    });
+                })
+                .catch((error) => {
+                    console.error('Error fetching news:', error);
+                });
+        }
+
+        document.querySelector('#addNewsButton').addEventListener('click', () => {
+            // Add your code for adding news here
+        });
+
+        loadNews();
+    </script> -->
+</body>
+</html

@@ -1,0 +1,22 @@
+body {
+    font-family: Arial, sans-serif;
+}
+table {
+    margin-left: auto;
+    margin-right: auto;
+    width: 80%;
+    border-collapse: collapse;
+    border: solid 3px;
+}
+th, td {
+    padding: 8px;
+    text-align: left;
+    border: solid 3px;
+}
+th {
+    background-color: #f2f2f2;
+}
+img {
+    width: 100px;
+    height: 100px;
+}
