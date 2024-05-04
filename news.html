@@ -5,62 +5,90 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Новости</title>
     <link rel="stylesheet" href="styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet"> -->
     <style>
+        h1 {
+            text-align: center;
+        }
         /* Стили для элементов новости */
         .post {
-            border: 1px solid #ccc;
+            border: 1px solid #000000;
             padding: 20px;
             margin-bottom: 20px;
+            border-radius: 10px;
             background-color: #f9f9f9;
         }
 
         .post-title {
             font-size: 24px;
+            color: red;
+            text-align: center;
             font-weight: bold;
             margin-bottom: 10px;
         }
 
         .post-text {
             font-size: 18px;
-            color: #666;
+            text-align: justify;
+            color: #000000;
             margin-bottom: 10px;
         }
 
         .post-date {
+            text-align: right;
             font-size: 16px;
-            color: #888;
+            color: #000000;
         }
 
         /* Стили для формы добавления новости */
         #add-news-form {
             margin-top: 20px;
             padding: 20px;
-            background-color: #444444;
+            border: 1px solid #000000;
+            border-radius: 10px;
+            background-color: #f5f5f5;
             display: flex;
             flex-direction: column;
         }
 
         #add-news-form input,
         #add-news-form textarea {
+            border: 1px solid #000000;
             margin-bottom: 10px;
             padding: 10px;
+            border-radius: 10px;
             font-size: 16px;
         }
 
         #add-news-form button {
             padding: 10px 20px;
+            border-radius: 10px;
             font-size: 16px;
-            background-color: #00ffff;
-            color: #1a1a1a;
-            border: none;
-            border-radius: 5px;
+            background-color: #ffffff;
+            color: blue;
+            border-radius: 10px;
             cursor: pointer;
             transition: background-color 0.3s ease;
         }
 
         #add-news-form button:hover {
-            background-color: #00cccc;
+            background-color: #d8d8d8;
+        }
+
+        .delete-button {
+            top: 10px; /* Отступ от верхнего края */
+            right: 10px; /* Отступ от правого края */
+            padding: 5px 10px;
+            font-size: 14px;
+            background-color: #ff3300;
+            color: #fff;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .delete-button:hover {
+            background-color: #cc0000;
         }
     </style>
 </head>
@@ -121,6 +149,7 @@
             postDate.textContent = `Дата: ${newsItem.date}`;
 
             const deleteButton = document.createElement('button');
+            deleteButton.classList.add('delete-button');
             deleteButton.textContent = 'Удалить';
             deleteButton.onclick = () => deleteNews(newsItem.id);
 

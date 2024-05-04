@@ -5,65 +5,40 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Объявления</title>
     <link rel="stylesheet" href="styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet"> -->
     <style>
-        /* Общие стили */
-        body {
-            font-family: 'Roboto', sans-serif;
-            background-color: #f0f0f0;
-            color: #333;
-            margin: 0;
-            padding: 0;
-        }
-
-        header {
-            background-color: #444444;
-            color: #fff;
-            padding: 10px 20px;
-            text-align: center;
-        }
-
-        nav {
-            margin-top: 20px;
-            text-align: center;
-        }
-
-        nav a {
-            color: #fff;
-            text-decoration: none;
-            margin: 0 10px;
-        }
-
         h1 {
             text-align: center;
-            margin-top: 20px;
         }
-
         /* Стили для элементов объявления */
         .announcement {
-            border: 1px solid #ccc;
+            border: 1px solid #000000;
             padding: 20px;
             margin-bottom: 20px;
+            border-radius: 10px;
             background-color: #fff;
-            position: relative;
         }
 
         .announcement-title {
             font-size: 24px;
+            color: red;
+            text-align: center;
             font-weight: bold;
             margin-bottom: 10px;
-            color: #333; /* Цвет текста заголовка */
         }
 
         .announcement-content {
             font-size: 18px;
-            color: #666;
+            text-align: justify;
+            color: #000000;
             margin-bottom: 10px;
         }
 
         .user-info {
             display: flex;
             align-items: center;
+            /* border-radius: 10px;
+            border: 1px solid #000000; */
         }
 
         .user-avatar {
@@ -82,48 +57,51 @@
 
         .user-name {
             font-size: 16px;
+            color: blue;
         }
 
         /* Стили для формы добавления объявления */
         #add-announcement-form {
             margin-top: 20px;
             padding: 20px;
-            background-color: #ddd;
+            border: 1px solid #000000;
+            border-radius: 10px;
+            background-color: #f5f5f5;
+            display: flex;
+            flex-direction: column;
         }
 
         #add-announcement-form input,
         #add-announcement-form textarea {
+            border: 1px solid #000000;
             margin-bottom: 10px;
             padding: 10px;
+            border-radius: 10px;
             font-size: 16px;
-            width: 100%;
         }
 
         #add-announcement-form button {
             padding: 10px 20px;
             font-size: 16px;
-            background-color: #00ccff;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
+            background-color: #ffffff;
+            color: blue;
+            border-radius: 10px;
             cursor: pointer;
             transition: background-color 0.3s ease;
         }
 
         #add-announcement-form button:hover {
-            background-color: #0099cc;
+            background-color: #d8d8d8;
         }
 
         /* Стили для кнопки удаления объявления */
         .delete-button {
-            position: absolute;
             top: 10px;
             right: 10px;
             padding: 5px 10px;
             font-size: 14px;
             background-color: #ff3300;
             color: #fff;
-            border: none;
             border-radius: 5px;
             cursor: pointer;
             transition: background-color 0.3s ease;
@@ -209,9 +187,9 @@
             deleteButton.textContent = 'Удалить';
             deleteButton.onclick = () => deleteAnnouncement(announcement.id);
 
+            announcementContainer.appendChild(userInfoContainer);
             announcementContainer.appendChild(announcementTitle);
             announcementContainer.appendChild(announcementContent);
-            announcementContainer.appendChild(userInfoContainer);
             announcementContainer.appendChild(deleteButton);
 
             return announcementContainer;

@@ -5,12 +5,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Пользователи</title>
     <link rel="stylesheet" href="styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         /* Стили для элементов пользователя */
+        h1 {
+            text-align: center;
+        }
+
+        #user-list {
+            display: flex;
+            flex-wrap: wrap; /* Разрешаем перенос элементов на новую строку */
+            justify-content: center; /* Равномерное распределение элементов по контейнеру */
+            /* width: 90%; Контейнер пользователей занимает 90% ширины экрана */
+            margin: 0 auto; /* Центрируем контейнер на странице */
+        }
+
         .user {
-            border: 1px solid #ccc;
+            border: 1px solid #000000;
+            width: calc(30% - 20px); /* Ширина каждого пользователя примерно 30% ширины контейнера с учетом отступов */
+            margin-bottom: 20px;
+            margin-right: 5px;
+            margin-left: 5px;
             padding: 20px;
+            border-radius: 10px; /* Закругляем края */
             margin-bottom: 20px;
             background-color: #f9f9f9;
             display: flex;
@@ -29,12 +45,12 @@
 
         .user-info p {
             font-size: 16px;
-            color: #666;
+            color: #000000;
         }
 
         .avatar {
-            width: 80px;
-            height: 80px;
+            width: 100px; /* Увеличиваем размер аватара */
+            height: 100px; /* Увеличиваем размер аватара */
             border-radius: 50%;
             overflow: hidden;
         }
@@ -48,23 +64,28 @@
         /* Стили для поиска пользователя */
         #search-container {
             margin-top: 20px;
+            margin-bottom: 20px; /* Создаем отступ между контейнером поиска и списком пользователей */
             padding: 20px;
-            background-color: #444444;
+            border-radius: 10px; /* Закругляем края */
+            background-color: #f5f5f5;
             display: flex;
             align-items: center;
         }
 
         #search-container input[type="text"] {
             flex: 1;
+            border-radius: 10px; /* Закругляем края */
             padding: 10px;
             font-size: 16px;
+            margin-right: 10px;
         }
 
         #search-container button {
-            padding: 10px 20px;
+            padding: 10px 15px; /* Уменьшаем размер кнопок */
+            margin-right: 10px; /* Добавляем отступ между кнопками */
             font-size: 16px;
-            background-color: #00ffff;
-            color: #1a1a1a;
+            background-color: #ffffff;
+            color: #2226ff;
             border: none;
             border-radius: 5px;
             cursor: pointer;
@@ -72,7 +93,7 @@
         }
 
         #search-container button:hover {
-            background-color: #00cccc;
+            background-color: #d8d8d8;
         }
     </style>
 </head>
