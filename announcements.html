@@ -5,18 +5,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Объявления</title>
     <link rel="stylesheet" href="styles.css">
-    <!-- <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet"> -->
     <style>
         h1 {
             text-align: center;
         }
         /* Стили для элементов объявления */
+        #announcements-list {
+            display: flex;
+            flex-wrap: wrap; /* Разрешаем перенос элементов на новую строку */
+            justify-content: center; /* Равномерное распределение элементов по контейнеру */
+            margin: 0 auto; /* Центрируем контейнер на странице */
+        }
+
         .announcement {
             border: 1px solid #000000;
+            width: calc(30% - 20px);
             padding: 20px;
+            margin-right: 5px;
+            margin-left: 5px;
             margin-bottom: 20px;
             border-radius: 10px;
-            background-color: #fff;
+            background-color: #f0f0f0;
         }
 
         .announcement-title {
@@ -37,8 +46,6 @@
         .user-info {
             display: flex;
             align-items: center;
-            /* border-radius: 10px;
-            border: 1px solid #000000; */
         }
 
         .user-avatar {
@@ -69,6 +76,8 @@
             background-color: #f5f5f5;
             display: flex;
             flex-direction: column;
+            width: 50%;
+            margin: 0 auto;
         }
 
         #add-announcement-form input,
@@ -83,7 +92,7 @@
         #add-announcement-form button {
             padding: 10px 20px;
             font-size: 16px;
-            background-color: #ffffff;
+            background-color: #76d858;
             color: blue;
             border-radius: 10px;
             cursor: pointer;
@@ -91,7 +100,7 @@
         }
 
         #add-announcement-form button:hover {
-            background-color: #d8d8d8;
+            background-color: #62b34a;
         }
 
         /* Стили для кнопки удаления объявления */
@@ -109,6 +118,38 @@
 
         .delete-button:hover {
             background-color: #cc0000;
+        }
+        /* Для экранов шириной до 768px */
+        @media screen and (max-width: 768px) {
+            .announcement {
+                width: calc(100% - 20px); /* Установим ширину объявлений на мобильных устройствах на 100% */
+            }
+
+            #add-announcement-form {
+                width: 90%; /* Уменьшим ширину формы добавления объявления на мобильных устройствах */
+            }
+        }
+
+        /* Для экранов шириной от 769px до 1024px */
+        @media screen and (min-width: 769px) and (max-width: 1024px) {
+            .announcement {
+                width: calc(50% - 20px); /* Установим ширину объявлений на планшетах на 50% */
+            }
+
+            #add-announcement-form {
+                width: 70%; /* Уменьшим ширину формы добавления объявления на планшетах */
+            }
+        }
+
+        /* Для экранов шириной от 1025px и выше */
+        @media screen and (min-width: 1025px) {
+            .announcement {
+                width: calc(30% - 20px); /* Возвращаем обычную ширину объявлений на устройствах с шириной экрана 1025px и более */
+            }
+
+            #add-announcement-form {
+                width: 50%; /* Возвращаем обычную ширину формы добавления объявления на устройствах с шириной экрана 1025px и более */
+            }
         }
     </style>
 </head>

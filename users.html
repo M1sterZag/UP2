@@ -6,53 +6,35 @@
     <title>Пользователи</title>
     <link rel="stylesheet" href="styles.css">
     <style>
-        /* Стили для элементов пользователя */
         h1 {
             text-align: center;
         }
-
+        /* Стили для элементов пользователя */
         #user-list {
             display: flex;
-            flex-wrap: wrap; /* Разрешаем перенос элементов на новую строку */
-            justify-content: center; /* Равномерное распределение элементов по контейнеру */
-            /* width: 90%; Контейнер пользователей занимает 90% ширины экрана */
-            margin: 0 auto; /* Центрируем контейнер на странице */
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 0 auto;
         }
 
         .user {
+            display: flex;
             border: 1px solid #000000;
-            width: calc(30% - 20px); /* Ширина каждого пользователя примерно 30% ширины контейнера с учетом отступов */
+            padding: 20px;
             margin-bottom: 20px;
+            border-radius: 10px;
+            background-color: #f9f9f9;
+            box-sizing: border-box;
             margin-right: 5px;
             margin-left: 5px;
-            padding: 20px;
-            border-radius: 10px; /* Закругляем края */
-            margin-bottom: 20px;
-            background-color: #f9f9f9;
-            display: flex;
-            align-items: center;
-        }
-
-        .user-info {
-            margin-left: 20px;
-        }
-
-        .user-info h2 {
-            font-size: 20px;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-
-        .user-info p {
-            font-size: 16px;
-            color: #000000;
         }
 
         .avatar {
-            width: 100px; /* Увеличиваем размер аватара */
-            height: 100px; /* Увеличиваем размер аватара */
+            width: 100px;
+            height: 100px;
             border-radius: 50%;
             overflow: hidden;
+            margin-right: 20px;
         }
 
         .avatar img {
@@ -61,39 +43,117 @@
             object-fit: cover;
         }
 
+        .user-info {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .user-info h2 {
+            font-size: 24px;
+            color: green;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .user-info p {
+            font-size: 18px;
+            color: #000000;
+            margin-bottom: 10px;
+        }
+
         /* Стили для поиска пользователя */
         #search-container {
             margin-top: 20px;
-            margin-bottom: 20px; /* Создаем отступ между контейнером поиска и списком пользователей */
+            margin-bottom: 20px;
             padding: 20px;
-            border-radius: 10px; /* Закругляем края */
-            background-color: #f5f5f5;
             display: flex;
+            /* flex-direction: row; Изменено на column для мобильных устройств */
+            align-items: center; /* Изменено на center для мобильных устройств */
+            border-radius: 10px;
+        }
+
+        /* Стили для поиска пользователя */
+        #search-container {
+            margin-top: 20px;
+            margin-bottom: 20px;
+            padding: 20px;
+            display: flex;
+            flex-direction: row; /* Горизонтальная ориентация */
+            justify-content: start; /* Равномерное распределение элементов */
             align-items: center;
+            border-radius: 10px;
         }
 
         #search-container input[type="text"] {
-            flex: 1;
-            border-radius: 10px; /* Закругляем края */
+            flex: 1; /* Расширяется на всю доступную ширину */
+            border-radius: 10px;
             padding: 10px;
             font-size: 16px;
+            margin: 10px;
             margin-right: 10px;
+            max-width: 70%; /* Максимальная ширина инпута */
         }
 
         #search-container button {
-            padding: 10px 15px; /* Уменьшаем размер кнопок */
-            margin-right: 10px; /* Добавляем отступ между кнопками */
+            padding: 10px 15px;
             font-size: 16px;
             background-color: #ffffff;
             color: #2226ff;
-            border: none;
             border-radius: 5px;
             cursor: pointer;
-            transition: background-color 0.3s ease;
+            margin-right: 10px;
+            margin-bottom: 5px;
+            margin-top: 5px;
+            transition: 0.3s ease;
         }
 
         #search-container button:hover {
-            background-color: #d8d8d8;
+            background-color: #dadada;
+        }
+
+        /* Медиа-запросы для адаптивности */
+        @media screen and (max-width: 768px) {
+            #search-container {
+                flex-direction: column; /* Вертикальная ориентация для мобильных устройств */
+                align-items: stretch; /* Выравнивание элементов по ширине */
+            }
+
+            #search-container input[type="text"] {
+                /* margin-right: 0; Убираем правый отступ для мобильных устройств */
+                margin-bottom: 10px; /* Добавляем отступ между инпутом и кнопкой */
+                max-width: none; /* Сбрасываем максимальную ширину */
+            }
+
+            #search-container button {
+                /* margin-right: 0; Убираем правый отступ для мобильных устройств */
+                width: 100%; /* Ширина кнопки 100% */
+            }
+        }
+
+
+        /* Медиа-запросы для адаптивности */
+        @media screen and (max-width: 768px) {
+            .user {
+                flex-basis: calc(100% - 20px);
+            }
+
+            .avatar {
+                width: 80px;
+                height: 80px;
+            }
+        }
+
+        @media screen and (min-width: 769px) and (max-width: 1024px) {
+            .user {
+                flex-basis: calc(50% - 20px);
+            }
+        }
+
+        @media screen and (min-width: 1025px) {
+            .user {
+                flex-basis: calc(33.333% - 20px);
+            }
         }
     </style>
 </head>
@@ -108,15 +168,15 @@
 
     <h1>Пользователи</h1>
 
+    <!-- Контейнер для списка пользователей -->
+    <div id="user-list"></div>
+
     <!-- Контейнер для поиска пользователя по ID -->
     <div id="search-container">
         <input type="text" id="userIdInput" placeholder="Введите ID пользователя">
         <button onclick="searchUser()">Поиск</button>
         <button onclick="cancelSearch()">Отмена</button>
     </div>
-
-    <!-- Контейнер для списка пользователей -->
-    <div id="user-list"></div>
 
     <script>
         let originalUsers = []; // Сохраняем изначальный список пользователей
