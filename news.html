@@ -1,165 +1,113 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Новости</title>
-    <link rel="stylesheet" href="styles.css">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Comic+Neue&display=swap" rel="stylesheet">
     <style>
-        h1 {
-            text-align: center;
-        }
-        
-        /* Стили для элементов новости */
-        #news-list {
-            display: flex;
-            flex-wrap: wrap; /* Разрешаем перенос элементов на новую строку */
-            justify-content: center; /* Равномерное распределение элементов по контейнеру */
-            margin: 0 auto; /* Центрируем контейнер на странице */
+        body {
+            font-family: 'Comic Neue', cursive;
         }
 
         .post {
-            flex: 0 0 calc(33.333% - 20px); /* Ширина каждой новости (1/3 ширины контейнера) с учетом отступов */
-            border: 1px solid #000000;
-            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
             margin-bottom: 20px;
-            border-radius: 10px;
-            background-color: #f9f9f9;
-            box-sizing: border-box; /* Учитываем padding и border в общей ширине элемента */
-            margin-right: 5px;
-            margin-left: 5px;
+            background-color: #f8f9fa;
+            transition: all 0.3s ease;
         }
 
-        /* Остальные стили остаются без изменений */
+        .post:hover {
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+        }
+
         .post-title {
             font-size: 24px;
-            color: green;
-            text-align: center;
             font-weight: bold;
             margin-bottom: 10px;
+            color: #007bff;
         }
 
         .post-text {
             font-size: 18px;
-            text-align: justify;
-            color: #000000;
             margin-bottom: 10px;
         }
 
         .post-date {
-            text-align: right;
             font-size: 18px;
-            color: #000000;
-        }
-
-        /* Стили для формы добавления новости */
-        #add-news-form {
-            margin-top: 20px;
-            padding: 20px;
-            border: 1px solid #000000;
-            border-radius: 10px;
-            background-color: #f5f5f5;
-            display: flex;
-            flex-direction: column;
-            width: 50%;
-            margin: 0 auto;
-        }
-
-        #add-news-form input,
-        #add-news-form textarea {
-            border: 1px solid #000000;
             margin-bottom: 10px;
-            padding: 10px;
-            border-radius: 10px;
-            font-size: 16px;
-        }
-
-        #add-news-form button {
-            padding: 10px 20px;
-            border-radius: 10px;
-            font-size: 16px;
-            background-color: #76d858;
-            color: blue;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        #add-news-form button:hover {
-            background-color: #62b34a;
         }
 
         .delete-button {
-            padding: 5px 10px;
-            font-size: 14px;
-            margin-top: 10px;
-            background-color: #ff3300;
-            color: #fff;
-            border-radius: 5px;
+            display: block;
+            margin-left: auto;
+            margin-right: 0;
+            font-family: 'Comic Neue', cursive;
+            font-size: 16px;
+            color: red;
+            background-color: transparent;
+            border: none;
             cursor: pointer;
-            transition: background-color 0.3s ease;
         }
 
         .delete-button:hover {
-            background-color: #cc0000;
+            color: white;
+            background-color: red;
         }
 
-        /* Для экранов шириной до 768px */
-        @media screen and (max-width: 768px) {
-            .post {
-                flex-basis: calc(100% - 20px); /* Устанавливаем ширину каждой новости на мобильных устройствах на 100% */
-            }
-
-            #add-news-form {
-                width: 90%; /* Уменьшаем ширину формы добавления новости на мобильных устройствах */
-            }
-        }
-
-        /* Для экранов шириной от 769px до 1024px */
-        @media screen and (min-width: 769px) and (max-width: 1024px) {
-            .post {
-                flex-basis: calc(50% - 20px); /* Устанавливаем ширину каждой новости на планшетах на 50% */
-            }
-
-            #add-news-form {
-                width: 70%; /* Уменьшаем ширину формы добавления новости на планшетах */
-            }
-        }
-
-        /* Для экранов шириной от 1025px и выше */
-        @media screen and (min-width: 1025px) {
-            .post {
-                flex-basis: calc(33.333% - 20px); /* Возвращаем обычную ширину каждой новости на устройствах с шириной экрана 1025px и более */
-            }
-
-            #add-news-form {
-                width: 50%; /* Возвращаем обычную ширину формы добавления новости на устройствах с шириной экрана 1025px и более */
-            }
+        .nav-link:hover {
+            color: white !important;
+            background-color: #007bff !important;
+            border-radius: 10px;
+            width: max-content;
+            padding: 8px;
         }
     </style>
 </head>
 <body>
     <header>
-        <nav>
-            <a href="users.html">Пользователи</a>
-            <a href="news.html">Новости</a>
-            <a href="announcements.html">Объявления</a>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="#">Новостной Блог</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="users.html">Пользователи</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="news.html">Новости <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="announcements.html">Объявления</a>
+                    </li>
+                </ul>
+            </div>
         </nav>
     </header>
 
-    <h1>Новости</h1>
+    <div class="container mt-5">
+        <h1 class="mb-4">Новости</h1>
 
-    <!-- Контейнер для списка новостей -->
-    <div id="news-list"></div>
+        <div id="news-list" class="mb-5"></div>
 
-    <!-- Форма для добавления новости -->
-    <div id="add-news-form">
-        <input type="text" id="newsTitleInput" placeholder="Заголовок новости">
-        <textarea id="newsContentInput" placeholder="Текст новости"></textarea>
-        <input type="date" id="newsDateInput">
-        <button onclick="addNews()">Добавить новость</button>
+        <div id="add-news-form">
+            <div class="form-group">
+                <input type="text" class="form-control mb-2" id="newsTitleInput" placeholder="Заголовок новости">
+                <textarea class="form-control mb-2" id="newsContentInput" rows="3" placeholder="Текст новости"></textarea>
+                <input type="date" class="form-control mb-2" id="newsDateInput">
+                <button class="btn btn-primary" onclick="addNews()">Добавить новость</button>
+            </div>
+        </div>
     </div>
 
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
         // Загрузка списка новостей с API
         function loadNews() {
@@ -192,10 +140,12 @@
 
             const postDate = document.createElement('div');
             postDate.classList.add('post-date');
-            postDate.textContent = `Дата: ${newsItem.date}`;
+            const date = new Date(newsItem.date);
+            const formattedDate = `${('0' + date.getDate()).slice(-2)}.${('0' + (date.getMonth() + 1)).slice(-2)}.${date.getFullYear()}`;
+            postDate.textContent = `Дата размещения: ${formattedDate}`;
 
             const deleteButton = document.createElement('button');
-            deleteButton.classList.add('delete-button');
+            deleteButton.classList.add('btn', 'btn-primary', 'delete-button');
             deleteButton.textContent = 'Удалить';
             deleteButton.onclick = () => deleteNews(newsItem.id);
 
