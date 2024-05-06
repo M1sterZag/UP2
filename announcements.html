@@ -4,42 +4,50 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Объявления</title>
-    <link rel="stylesheet" href="styles.css">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Comic+Neue&display=swap" rel="stylesheet">
     <style>
-        h1 {
-            text-align: center;
+        /* html {
+            height: 100%;
         }
-        /* Стили для элементов объявления */
-        #announcements-list {
-            display: flex;
-            flex-wrap: wrap; /* Разрешаем перенос элементов на новую строку */
-            justify-content: center; /* Равномерное распределение элементов по контейнеру */
-            margin: 0 auto; /* Центрируем контейнер на странице */
+        
+        body {
+            min-height: 100%;
+        } */
+        body {
+            background: linear-gradient(120deg, #702A3A, #EFC990);
+            font-family: 'Comic Neue', cursive;
+        }
+
+        h1 {
+            color: white;
+        }
+
+        h2 {
+            font-size: 1.5rem;
         }
 
         .announcement {
-            border: 1px solid #000000;
-            width: calc(30% - 20px);
+            /* border: 1px solid #000000; */
             padding: 20px;
-            margin-right: 5px;
-            margin-left: 5px;
             margin-bottom: 20px;
             border-radius: 10px;
             background-color: #f0f0f0;
         }
 
+        .announcement:hover {
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+        }
+
         .announcement-title {
             font-size: 24px;
-            color: red;
-            text-align: center;
+            color: #007bff;
             font-weight: bold;
             margin-bottom: 10px;
         }
 
         .announcement-content {
             font-size: 18px;
-            text-align: justify;
-            color: #000000;
             margin-bottom: 10px;
         }
 
@@ -48,76 +56,35 @@
             align-items: center;
         }
 
-        .user-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
+        .avatar img {
+            max-width: 100px;
+            border-radius: 10px;
             overflow: hidden;
-            margin-right: 10px;
         }
 
-        .user-avatar img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .user-name {
-            font-size: 16px;
-            color: blue;
-        }
-
-        /* Стили для формы добавления объявления */
-        #add-announcement-form {
-            margin-top: 20px;
-            padding: 20px;
-            border: 1px solid #000000;
-            border-radius: 10px;
-            background-color: #f5f5f5;
-            display: flex;
-            flex-direction: column;
-            width: 50%;
-            margin: 0 auto;
-        }
-
-        #add-announcement-form input,
-        #add-announcement-form textarea {
-            border: 1px solid #000000;
-            margin-bottom: 10px;
-            padding: 10px;
-            border-radius: 10px;
-            font-size: 16px;
-        }
-
-        #add-announcement-form button {
-            padding: 10px 20px;
-            font-size: 16px;
-            background-color: #76d858;
-            color: blue;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        #add-announcement-form button:hover {
-            background-color: #62b34a;
-        }
-
-        /* Стили для кнопки удаления объявления */
         .delete-button {
-            top: 10px;
-            right: 10px;
-            padding: 5px 10px;
-            font-size: 14px;
-            background-color: #ff3300;
-            color: #fff;
-            border-radius: 5px;
+            display: block;
+            margin-left: auto;
+            margin-right: 0;
+            font-family: 'Comic Neue', cursive;
+            font-size: 16px;
+            color: red;
+            background-color: transparent;
+            border: none;
             cursor: pointer;
-            transition: background-color 0.3s ease;
         }
 
         .delete-button:hover {
-            background-color: #cc0000;
+            color: white;
+            background-color: red;
+        }
+
+        .nav-link:hover {
+            color: white !important;
+            background-color: #007bff !important;
+            border-radius: 10px;
+            width: max-content;
+            padding: 8px;
         }
 
         .message-overlay {
@@ -128,90 +95,78 @@
             width: 100%;
             height: 100%;
             background-color: rgba(0, 0, 0, 0.5);
-            z-index: 9999;
+            z-index: 999;
         }
-
         .message-box {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background-color: #fff;
+            background-color: white;
             padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
-
         .close-btn {
             position: absolute;
-            top: 10px;
+            top: 5px;
             right: 10px;
             cursor: pointer;
+            font-size: 24px;
         }
 
-        /* Для экранов шириной до 768px */
-        @media screen and (max-width: 768px) {
-            .announcement {
-                width: calc(100% - 20px); /* Установим ширину объявлений на мобильных устройствах на 100% */
-            }
-
-            #add-announcement-form {
-                width: 90%; /* Уменьшим ширину формы добавления объявления на мобильных устройствах */
-            }
-        }
-
-        /* Для экранов шириной от 769px до 1024px */
-        @media screen and (min-width: 769px) and (max-width: 1024px) {
-            .announcement {
-                width: calc(50% - 20px); /* Установим ширину объявлений на планшетах на 50% */
-            }
-
-            #add-announcement-form {
-                width: 70%; /* Уменьшим ширину формы добавления объявления на планшетах */
-            }
-        }
-
-        /* Для экранов шириной от 1025px и выше */
-        @media screen and (min-width: 1025px) {
-            .announcement {
-                width: calc(30% - 20px); /* Возвращаем обычную ширину объявлений на устройствах с шириной экрана 1025px и более */
-            }
-
-            #add-announcement-form {
-                width: 50%; /* Возвращаем обычную ширину формы добавления объявления на устройствах с шириной экрана 1025px и более */
-            }
-        }
     </style>
 </head>
 <body>
     <header>
-        <nav>
-            <a href="users.html">Пользователи</a>
-            <a href="news.html">Новости</a>
-            <a href="announcements.html">Объявления</a>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="news.html">Новостной Блог</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="users.html">Пользователи</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="news.html">Новости <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="announcements.html">Объявления</a>
+                    </li>
+                </ul>
+            </div>
         </nav>
     </header>
 
-    <h1>Объявления</h1>
+    <div class="container mt-5">
+        <h1 class="mb-4">Объявления</h1>
 
-    <!-- Контейнер для списка объявлений -->
-    <div id="announcements-list"></div>
+        <div id="message-overlay" class="message-overlay">
+            <div class="message-box">
+                <span class="close-btn" onclick="closeMessage()">×</span>
+                <p id="message-text"></p>
+            </div>
+        </div>
 
-    <div id="message-overlay" class="message-overlay">
-        <div class="message-box">
-            <span class="close-btn" onclick="closeMessage()">×</span>
-            <p id="message-text"></p>
+        <!-- Контейнер для списка объявлений -->
+        <div id="announcements-list" class="mb-5"></div>
+
+        <!-- Форма для добавления нового объявления -->
+        <div id="add-announcement-form">
+            <div class="form-group">
+                <input type="number" id="userIdInput" class="form-control mb-2" placeholder="ID пользователя" min="1">
+                <input type="text" id="announcementTitleInput" class="form-control mb-2" placeholder="Заголовок объявления">
+                <textarea id="announcementContentInput" class="form-control mb-2" placeholder="Содержание объявления"></textarea>
+                <button onclick="addAnnouncement()" class="btn btn-primary">Добавить объявление</button>
+            </div>
         </div>
     </div>
 
-    <!-- Форма для добавления нового объявления -->
-    <div id="add-announcement-form">
-        <input type="number" id="userIdInput" placeholder="ID пользователя" min="1">
-        <input type="text" id="announcementTitleInput" placeholder="Заголовок объявления">
-        <textarea id="announcementContentInput" placeholder="Содержание объявления"></textarea>
-        <button onclick="addAnnouncement()">Добавить объявление</button>
-    </div>
-
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
         // Загрузка списка объявлений с информацией о связанных пользователях
         function loadAnnouncements() {
@@ -243,17 +198,17 @@
             announcementContent.textContent = announcement.content;
 
             const userInfoContainer = document.createElement('div');
-            userInfoContainer.classList.add('user-info');
+            userInfoContainer.classList.add('user-info', 'media', 'mb-2');
 
             const userAvatar = document.createElement('div');
-            userAvatar.classList.add('user-avatar');
+            userAvatar.classList.add('avatar', 'mr-2');
             const avatarImg = document.createElement('img');
             avatarImg.src = announcement.user.avatar;
             avatarImg.alt = 'Аватар пользователя';
             userAvatar.appendChild(avatarImg);
 
-            const userName = document.createElement('div');
-            userName.classList.add('user-name');
+            const userName = document.createElement('h2');
+            userName.classList.add('user-name', 'mt-0', 'fs-4');
             userName.textContent = announcement.user.name;
 
             userInfoContainer.appendChild(userAvatar);
@@ -261,7 +216,7 @@
 
             // Кнопка "Удалить" для объявления
             const deleteButton = document.createElement('button');
-            deleteButton.classList.add('delete-button');
+            deleteButton.classList.add('btn', 'btn-primary', 'delete-button');
             deleteButton.textContent = 'Удалить';
             deleteButton.onclick = () => deleteAnnouncement(announcement.id);
 
@@ -305,11 +260,11 @@
                         document.getElementById('announcementTitleInput').value = '';
                         document.getElementById('announcementContentInput').value = '';
                     } else {
-                        throw new Error('Ошибка при добавлении объявления');
+                        throw new Error('Пользователь не найден. Пожалуйста, введите корректный ID.');
                     }
                 })
                 .catch(error => {
-                    console.error('Ошибка при добавлении объявления:', error);
+                    console.error('Ошибка при добавлении объявления');
                     showMessage(error.message);
                 });
         }

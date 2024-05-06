@@ -7,17 +7,28 @@
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Comic+Neue&display=swap" rel="stylesheet">
     <style>
+        /* html {
+            height: 100%;
+        }
+
         body {
+            min-height: 100%;
+        } */
+        body {
+            background: linear-gradient(120deg, #702A3A, #EFC990);
             font-family: 'Comic Neue', cursive;
         }
         
         .avatar img {
-            max-width: 100px; /* Желаемая максимальная ширина */
-            max-height: 100px; /* Желаемая максимальная высота */
+            max-width: 100px;
+            border-radius: 10px;
         }
 
         .user-info {
             margin-left: 20px;
+        }
+        h1 {
+            color: white;
         }
         h2 {
             font-size: 1.5rem;
@@ -66,6 +77,7 @@
         .user {
             padding: 10px;
             border: 1px solid #dee2e6;
+            background-color: #f8f9fa;
             border-radius: 5px;
             margin-bottom: 10px;
             transition: all 0.3s ease;
@@ -87,7 +99,7 @@
 <body>
     <header>
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <a class="navbar-brand" href="#">Новостной Блог</a>
+            <a class="navbar-brand" href="news.html">Новостной Блог</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -165,7 +177,6 @@
             avatarContainer.classList.add('avatar', 'mr-3');
 
             const avatarImg = document.createElement('img');
-            avatarImg.classList.add('rounded-circle');
             avatarImg.src = user.avatar;
             avatarImg.alt = 'Аватар пользователя';
 
