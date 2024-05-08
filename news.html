@@ -5,30 +5,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Новости</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Comic+Neue&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.css"/>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.css"/>
     <style>
-        /* html {
-            height: 100%;
-        }
-        
-        body {
+        html {
             min-height: 100%;
-        } */
+        }
         body {
-            font-family: 'Comic Neue', cursive;
-            background: linear-gradient(120deg, #702A3A, #EFC990);
+            font-family: 'Montserrat', cursive;
+            background-color: #6B99C3;
         }
         h1 {
-            color: white;
+            color: #E4E5EA;
+            text-align: center;
         }
 
         .post {
-            border: 1px solid #ccc;
             border-radius: 5px;
             padding: 10px;
-            margin-bottom: 20px;
-            background-color: #f8f9fa;
+            background-color: #E4E5EA;
             transition: all 0.3s ease;
+            margin: 10px;
         }
 
         .post:hover {
@@ -39,16 +37,19 @@
             font-size: 24px;
             font-weight: bold;
             margin-bottom: 10px;
-            color: #007bff;
+            color: #0C151C;
         }
 
         .post-text {
             font-size: 18px;
+            font-weight: 500;
+            display: inline-block;
             margin-bottom: 10px;
         }
 
         .post-date {
             font-size: 18px;
+            font-weight: 500;
             margin-bottom: 10px;
         }
 
@@ -56,7 +57,7 @@
             display: block;
             margin-left: auto;
             margin-right: 0;
-            font-family: 'Comic Neue', cursive;
+            font-family: 'Montserrat', cursive;
             font-size: 16px;
             color: red;
             background-color: transparent;
@@ -65,16 +66,48 @@
         }
 
         .delete-button:hover {
-            color: white;
+            color: #E4E5EA;
             background-color: red;
         }
 
         .nav-link:hover {
-            color: white !important;
-            background-color: #007bff !important;
+            color: #E4E5EA !important;
+            background-color: #6B99C3 !important;
             border-radius: 10px;
             width: max-content;
             padding: 8px;
+        }
+
+        .news-grid {
+            margin-bottom: 20px;
+        }
+
+        .slick-prev:before,
+        .slick-next:before {
+            color: #E4E5EA; /* Изменяем цвет кнопок прокрутки */
+        }
+
+        .slick-dots li button:before {
+            color: #E4E5EA; /* Изменяем цвет кнопок прокрутки */
+        }
+
+        @media (min-width: 768px) {
+            .news-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 767.98px) {
+            .news-grid {
+                grid-template-columns: repeat(auto, 1fr);
+            }
+
+            .slick-prev, .slick-next {
+                display: none !important; /* Скрываем кнопки прокрутки на маленьких экранах */
+            }
+        }
+        h2 {
+            font-size: 1.2rem;
         }
     </style>
 </head>
@@ -101,10 +134,10 @@
         </nav>
     </header>
 
-    <div class="container mt-5">
-        <h1 class="mb-4">Новости</h1>
+    <div class="container mt-3 mb-3">
+        <h1>Новости</h1>
 
-        <div id="news-list" class="mb-5"></div>
+        <div id="news-list" class="news-grid"></div>
 
         <div id="add-news-form">
             <div class="form-group">
@@ -119,24 +152,48 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
     <script>
-        // Загрузка списка новостей с API
         function loadNews() {
             fetch('https://4418c1d7060c8d8f.mokky.dev/news')
                 .then(response => response.json())
                 .then(news => {
                     const newsListElement = document.getElementById('news-list');
-                    newsListElement.innerHTML = ''; // Очищаем содержимое перед загрузкой новых данных
+                    newsListElement.innerHTML = '';
 
                     news.forEach(item => {
                         const postContainer = createPostContainer(item);
                         newsListElement.appendChild(postContainer);
                     });
+
+                    $('.news-grid').slick({
+                        slidesToShow: 3,
+                        slidesToScroll: 1,
+                        autoplay: true,
+                        autoplaySpeed: 2000,
+                        arrows: true,
+                        dots: true,
+                        prevArrow: '<button type="button" class="slick-prev">&#8592;</button>',
+                        nextArrow: '<button type="button" class="slick-next">&#8594;</button>',
+                        responsive: [
+                            {
+                                breakpoint: 992,
+                                settings: {
+                                    slidesToShow: 2
+                                }
+                            },
+                            {
+                                breakpoint: 576,
+                                settings: {
+                                    slidesToShow: 1
+                                }
+                            }
+                        ]
+                    });
                 })
                 .catch(error => console.error('Ошибка при загрузке новостей:', error));
         }
 
-        // Функция для создания контейнера с информацией о новости
         function createPostContainer(newsItem) {
             const postContainer = document.createElement('div');
             postContainer.classList.add('post');
@@ -168,7 +225,6 @@
             return postContainer;
         }
 
-        // Функция для добавления новости
         function addNews() {
             const newsTitleInput = document.getElementById('newsTitleInput');
             const newsContentInput = document.getElementById('newsContentInput');
@@ -195,34 +251,31 @@
                 }
             })
             .then(() => {
-                // После успешного добавления новости, перезагружаем список новостей
                 loadNews();
-                // Очищаем поля ввода
                 newsTitleInput.value = '';
                 newsContentInput.value = '';
                 newsDateInput.value = '';
             })
             .catch(error => console.error('Ошибка при добавлении новости:', error));
+            location.reload(true) // для обновления слайдера
         }
 
-        // Функция для удаления новости по ID
         function deleteNews(newsId) {
             fetch(`https://4418c1d7060c8d8f.mokky.dev/news/${newsId}`, {
                 method: 'DELETE'
             })
             .then(response => {
                 if (response.ok) {
-                    // После успешного удаления новости, перезагружаем список новостей
                     loadNews();
                 } else {
                     throw new Error('Ошибка при удалении новости');
                 }
             })
             .catch(error => console.error('Ошибка при удалении новости:', error));
+            location.reload(true) // для обновления слайдера
         }
+        window.onload = loadNews()
 
-        // Загружаем список новостей при загрузке страницы
-        window.onload = loadNews;
     </script>
 </body>
 </html>

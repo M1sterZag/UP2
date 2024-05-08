@@ -5,20 +5,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Пользователи</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Comic+Neue&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
     <style>
-        /* html {
-            height: 100%;
+        html {
+            min-height: 100%;
         }
 
         body {
-            min-height: 100%;
-        } */
-        body {
-            background: linear-gradient(120deg, #702A3A, #EFC990);
-            font-family: 'Comic Neue', cursive;
+            font-family: 'Montserrat', cursive;
+            background-color: #6B99C3;
         }
-        
+
+        .user {
+            padding: 10px;
+            background-color: #E4E5EA;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            color: #0C151C;
+        }
+        .user:hover {
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+        }
+
         .avatar img {
             max-width: 100px;
             border-radius: 10px;
@@ -27,20 +35,24 @@
         .user-info {
             margin-left: 20px;
         }
+
         h1 {
-            color: white;
+            color: #E4E5EA;
         }
+        
         h2 {
             font-size: 1.5rem;
         }
+
         .user-info h2 {
-            /* font-size: 24px; */
             margin-bottom: 5px;
         }
+
         .user-info p {
             font-size: 18px;
-            color: #6c757d;
+            color: #0C151C;
         }
+
         .message-overlay {
             display: none;
             position: fixed;
@@ -51,6 +63,7 @@
             background-color: rgba(0, 0, 0, 0.5);
             z-index: 999;
         }
+
         .message-box {
             position: absolute;
             top: 50%;
@@ -59,8 +72,9 @@
             background-color: white;
             padding: 20px;
             border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
         }
+
         .close-btn {
             position: absolute;
             top: 5px;
@@ -68,31 +82,50 @@
             cursor: pointer;
             font-size: 24px;
         }
-    
+
         .btn {
             margin-top: 10px;
+            margin-right: 10px;
+            background-color: #235983;
+            color: #E4E5EA;
         }
-    
-        /* Добавленные стили для адаптивного отображения пользователей */    
-        .user {
-            padding: 10px;
-            border: 1px solid #dee2e6;
-            background-color: #f8f9fa;
-            border-radius: 5px;
-            margin-bottom: 10px;
-            transition: all 0.3s ease;
+
+        .btn:focus, .btn:active {
+            box-shadow: none !important;
         }
-    
-        .user:hover {
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+
+        .btn:hover {
+            color: #E4E5EA;
+            background-color: #2a71a7;
         }
-    
+
         .nav-link:hover {
-            color: white !important;
-            background-color: #007bff !important;
+            color: #E4E5EA !important;
+            background-color: #6B99C3 !important;
             border-radius: 10px;
             width: max-content;
             padding: 8px;
+        }
+        .user-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-auto-columns: auto;
+            grid-gap: 20px;
+        }
+
+        @media (min-width: 768px) { /* Если ширина экрана больше или равна 768px */
+            .user-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 767.98px) { /* Если ширина экрана меньше 768px */
+            .user-grid {
+                grid-template-columns: repeat(1, 1fr);
+            }
+        }
+        h2 {
+            font-size: 1.2rem;
         }
     </style>
 </head>
@@ -119,7 +152,7 @@
         </nav>
     </header>
 
-    <div class="container mt-5">
+    <div class="container mt-3 mb-3">
         <h1>Пользователи</h1>
         
         <div id="message-overlay" class="message-overlay">
@@ -132,12 +165,12 @@
         <!-- Контейнер для поиска пользователя по ID -->
         <div id="search-container" class="mt-3 mb-3">
             <input type="text" class="form-control d-inline-block mr-2" id="userIdInput" placeholder="Введите ID пользователя">
-            <button class="btn btn-primary mr-2" onclick="searchUser()">Поиск</button>
-            <button class="btn btn-secondary" onclick="cancelSearch()">Отмена</button>
+            <button class="btn" onclick="searchUser()">Поиск</button>
+            <button class="btn" onclick="cancelSearch()">Отмена</button>
         </div>
 
         <!-- Контейнер для списка пользователей -->
-        <div id="user-list"></div>
+        <div class="user-grid" id="user-list"></div>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
@@ -171,7 +204,7 @@
         // Функция для создания контейнера с информацией о пользователе
         function createUserContainer(user) {
             const userContainer = document.createElement('div');
-            userContainer.classList.add('user', 'media', 'mt-3');
+            userContainer.classList.add('user', 'media');
 
             const avatarContainer = document.createElement('div');
             avatarContainer.classList.add('avatar', 'mr-3');
@@ -189,11 +222,11 @@
             userName.classList.add('mt-0', 'fs-4');
             userName.textContent = user.name;
 
-            const userId = document.createElement('p');
-            userId.textContent = `ID: ${user.id}`;
+            // const userId = document.createElement('p');
+            // userId.textContent = `ID: ${user.id}`;
 
             userInfo.appendChild(userName);
-            userInfo.appendChild(userId);
+            // userInfo.appendChild(userId);
 
             userContainer.appendChild(avatarContainer);
             userContainer.appendChild(userInfo);
@@ -229,7 +262,8 @@
 
         // Функция для отмены поиска и отображения всех пользователей
         function cancelSearch() {
-            displayUsers(originalUsers); // Отображаем всех пользователей из изначального списка
+            document.getElementById('userIdInput').value = '';
+            displayUsers(originalUsers); // Отображаем всех пользователей из изначального списка          
         }
 
         // Загружаем список пользователей при загрузке страницы
